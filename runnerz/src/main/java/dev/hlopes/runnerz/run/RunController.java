@@ -1,5 +1,6 @@
 package dev.hlopes.runnerz.run;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class RunController {
         var optionalRun = runRepository.findById(id);
 
         if (optionalRun.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new RunNotFoundException();
         }
 
         return optionalRun.get();
@@ -42,12 +43,12 @@ public class RunController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    Run create(@RequestBody Run run) {
+    Run create(@Valid @RequestBody Run run) {
         return runRepository.create(run);
     }
 
     @PutMapping("/{id}")
-    Run update(@PathVariable Integer id, @RequestBody Run run) {
+    Run update(@PathVariable Integer id, @Valid @RequestBody Run run) {
         return runRepository.update(id, run);
     }
 
